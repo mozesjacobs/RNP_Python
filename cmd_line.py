@@ -5,6 +5,7 @@ def parse_args():
 
     # save params
     parser.add_argument("-SN", "--session_name", default="may24", type=str, help="Session name")
+    parser.add_argument("-M", "--model", default="RNP", type=str, help="Which model to load (RNP, RNP_GON)")
     parser.add_argument("-EF", "--exp_folder", default="experiments", type=str, help="Folder for experiments")
     parser.add_argument('-NF', '--net_folder', default="trained_models", type=str, help="Folder for trained models")
     parser.add_argument('-TBP', '--tensorboard_folder', default="tb_runs", type=str, help="Folder for tensorboard logs")
@@ -23,7 +24,7 @@ def parse_args():
 
     # training / testing
     parser.add_argument('-D', '--device', default=2, type=int, help="Which device to use")
-    parser.add_argument('-E', '--epochs', default=25, type=int, help="Number of Training Epochs")
+    parser.add_argument('-E', '--epochs', default=20, type=int, help="Number of Training Epochs")
     parser.add_argument('-B', '--batch_size', default=50, type=int, help="Batch size")    
     parser.add_argument('-SI', '--save_interval', default=1, type=int, help="How often (in epochs) to save a checkpoint in training")
     parser.add_argument('-TI', '--test_interval', default=1, type=int, help="How often (in epochs) to evaluate the model on test data during training")

@@ -11,11 +11,10 @@ import os
 import json
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
-
+from utils import make_model
 from cmd_line import parse_args
 from trainer import train
 from eval import test
-from RNP import Net
 
 def main():
     # Load args
@@ -31,10 +30,10 @@ def main():
                                             shuffle=True, num_workers=1)
 
     # paths
-    cp_path = args.net_folder + "/" + args.session_name + "/"
-    exp_path = args.exp_folder + "/" + args.session_name + "/"
-    args_path = args.net_folder + "/" + args.session_name + "/args.txt"
-    tb_path = args.tensorboard_folder + "/" + args.session_name + "/train"
+    cp_path = args.net_folder + "/" + args.model + "/" + args.session_name + "/"
+    exp_path = args.exp_folder + "/" + args.model + "/" + args.session_name + "/"
+    args_path = args.net_folder + "/" + args.model + "/" + args.session_name + "/args.txt"
+    tb_path = args.tensorboard_folder + "/" + args.model + "/" + args.session_name + "/train"
     if not os.path.isdir(args.tensorboard_folder):
         os.system("mkdir -p " + args.tensorboard_folder)
     if not os.path.isdir(cp_path):
@@ -55,7 +54,7 @@ def main():
     device = torch.cuda.current_device()
     
     # net
-    net = Net(args).to(device)
+    net = make_model(args).to(device)
     optim = torch.optim.Adam(net.parameters(), lr=args.learning_rate)
     scheduler = torch.optim.lr_scheduler.ExponentialLR(optim, gamma=args.gamma_factor)
     initial_e = 0

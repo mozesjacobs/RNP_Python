@@ -9,8 +9,8 @@ import numpy as np
 import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
+from utils import make_model
 from cmd_line import parse_args
-from RNP import Net
 
 # plots a grid of one example for each of the 10 digits
 def test(net, device, test_loader, fig_path):
@@ -69,8 +69,8 @@ def main():
                                             shuffle=True, num_workers=1)
 
     # paths
-    cp_path = args.net_folder + "/" + args.session_name + "/"
-    exp_path = args.exp_folder + "/" + args.session_name + "/"
+    cp_path = args.net_folder + "/" + args.model + "/" + args.session_name + "/"
+    exp_path = args.exp_folder + "/" + args.model + "/" + args.session_name + "/"
     if not os.path.isdir(cp_path):
         os.system("mkdir -p " + cp_path)
     if not os.path.isdir(exp_path):
@@ -85,7 +85,7 @@ def main():
     device = torch.cuda.current_device()
     
     # load model
-    net = Net(args).to(device)
+    net = load_model(args).to(device)
     checkpoint = torch.load(cp_path, map_location="cuda:" + str(device))
     net.load_state_dict(checkpoint['model'])
     net.to(device)
