@@ -25,5 +25,6 @@ def train(net, device, train_loader, train_board, optim, epoch, clip, loss_func)
         epoch_loss += batch_loss
 
     # tensorboard
+    epoch_loss /= net.img_dim
     epoch_loss /= len(train_loader)
     train_board.add_scalar('Loss 1', epoch_loss, epoch)
