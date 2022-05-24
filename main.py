@@ -35,6 +35,8 @@ def main():
     exp_path = args.exp_folder + "/" + args.session_name + "/"
     args_path = args.net_folder + "/" + args.session_name + "/args.txt"
     tb_path = args.tensorboard_folder + "/" + args.session_name + "/train"
+    if not os.path.isdir(args.tensorboard_folder):
+        os.system("mkdir -p " + args.tensorboard_folder)
     if not os.path.isdir(cp_path):
         os.system("mkdir -p " + cp_path)
     if not os.path.isdir(exp_path):
