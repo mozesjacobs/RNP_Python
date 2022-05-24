@@ -6,6 +6,11 @@ from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
 import numpy as np
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+
+from cmd_line import parse_args
+from RNP import Net
 
 # plots a grid of one example for each of the 10 digits
 def test(net, device, test_loader, fig_path):
@@ -53,3 +58,40 @@ def test(net, device, test_loader, fig_path):
     else:
         plt.show()
     
+def main():
+    # Load args
+    args = parse_args()
+
+    # Load data
+    transform = transforms.Compose([transforms.ToTensor()]) 
+    testset = torchvision.datasets.MNIST(root='./data', train=False, download=True, transform=transform)
+    test_loader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size,
+                                            shuffle=True, num_workers=1)
+
+    # paths
+    cp_path = args.net_folder + "/" + args.session_name + "/"
+    exp_path = args.exp_folder + "/" + args.session_name + "/"
+    if not os.path.isdir(cp_path):
+        os.system("mkdir -p " + cp_path)
+    if not os.path.isdir(exp_path):
+        os.system("mkdir -p " + exp_path)
+    if args.print_folder == 1:
+        print(cp_path)
+        print(exp_path)
+    cp_path += "checkpoint.pt"
+
+    # device
+    torch.cuda.set_device(args.device)
+    device = torch.cuda.current_device()
+    
+    # load model
+    net = Net(args).to(device)
+    checkpoint = torch.load(cp_path, map_location="cuda:" + str(device))
+    net.load_state_dict(checkpoint['model'])
+    net.to(device)
+
+    # evaluates
+    test(net, device, test_loader, exp_path + "grid.png")
+
+if __name__ == "__main__":
+    main()
