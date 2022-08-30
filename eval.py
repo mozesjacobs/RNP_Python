@@ -35,10 +35,33 @@ def test(net, device, test_loader, fig_path):
 
     # forward
     _,_, x_ts, x_t_patches, x_orig_patches = net(x)
-
     # sum patches to create image
     x_hat = torch.sum(x_t_patches, dim=1)
 
+    #x_hat = net(x)
+
+    # plot
+    """
+    fig, axes = plt.subplots(10, 2, figsize=(5, 20))
+    for i in range(10):
+        axes[i][0].imshow(x_hat[i].reshape(28, 28).detach().cpu().numpy(), cmap='gray')
+        axes[i][1].imshow(x[i].reshape(28, 28).detach().cpu().numpy(), cmap='gray')
+    plt.savefig(fig_path)
+    plt.close()
+    """
+    
+    # plot
+    """
+    num_iters = x_hat.size(1)
+    fig, axes = plt.subplots(10, num_iters, figsize=(5, 20))
+    for i in range(10):
+        for j in range(num_iters):
+            axes[i][j].imshow(x_hat[i][j].reshape(28, 28).detach().cpu().numpy(), cmap='gray')
+    plt.savefig(fig_path)
+    plt.close()
+    """
+
+    #"""
     # plot
     fig, axes = plt.subplots(10 * 3, 5, figsize=(5, 20))
     for i in range(10):
@@ -57,6 +80,7 @@ def test(net, device, test_loader, fig_path):
         plt.close()
     else:
         plt.show()
+    #"""
     
 def main():
     # Load args
@@ -85,7 +109,7 @@ def main():
     device = torch.cuda.current_device()
     
     # load model
-    net = load_model(args).to(device)
+    net = make_model(args).to(device)
     checkpoint = torch.load(cp_path, map_location="cuda:" + str(device))
     net.load_state_dict(checkpoint['model'])
     net.to(device)

@@ -4,8 +4,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Template")
 
     # save params
-    parser.add_argument("-SN", "--session_name", default="may24", type=str, help="Session name")
-    parser.add_argument("-M", "--model", default="RNP", type=str, help="Which model to load (RNP, RNP_GON)")
+    parser.add_argument("-SN", "--session_name", default="may29_2iter", type=str, help="Session name")
+    parser.add_argument("-M", "--model", default="RNP_IAI2", type=str, help="Which model to load (RNP, RNP_GON)")
     parser.add_argument("-EF", "--exp_folder", default="experiments", type=str, help="Folder for experiments")
     parser.add_argument('-NF', '--net_folder', default="trained_models", type=str, help="Folder for trained models")
     parser.add_argument('-TBP', '--tensorboard_folder', default="tb_runs", type=str, help="Folder for tensorboard logs")
@@ -17,6 +17,8 @@ def parse_args():
     parser.add_argument('-HHD', '--hypernet_hidden_dim', default=128, type=int)
     parser.add_argument('-ED', '--e_dim', default=64, type=int)
     parser.add_argument('-TH', '--theta', default=4, type=int)
+    parser.add_argument('-IS', '--iterative_steps', default=2, type=int)
+    parser.add_argument('-LNE', '--layernorm_error', default=False, type=bool, help="If true, applies layernorm to error")
 
     # learning params
     parser.add_argument('-LR', '--learning_rate', default=4e-5, type=float, help="Learning rate")
@@ -34,8 +36,9 @@ def parse_args():
     # data
     parser.add_argument('-ID', '--img_dim', default=28, type=int, help="Dimensions of the frames")
     parser.add_argument('-CH', '--channels', default=1, type=int, help="Number of channels in image frame")
+    #parser.add_argument('-DIG', '--digit', default=None, type=int, help="Digit to learn (None for all)") # not implemented
 
     # other
     parser.add_argument('-PF', '--print_folder', default=1, type=int, help="Print the name of the folders things are saved in")
     
-    return parser.parse_args() 
+    return parser.parse_args()

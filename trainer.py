@@ -9,6 +9,8 @@ def train(net, device, train_loader, train_board, optim, epoch, clip, loss_func)
         x = x.type(torch.FloatTensor).to(device)
         _,_, x_ts, x_t_patches, x_orig_patches = net(x)
         x_hat = torch.sum(x_t_patches, dim=1)
+        #x_hat = net(x)
+        #x_hat = net(x)[:,-1]
         
         # loss
         batch_loss = loss_func(x_hat, x.view(-1, net.img_dim)).sum(1).mean()
